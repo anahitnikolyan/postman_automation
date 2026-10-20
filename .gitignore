@@ -1,0 +1,5 @@
+.DS_Store
+.idea/
+newman/
+report.html
+*.postman_environment.json

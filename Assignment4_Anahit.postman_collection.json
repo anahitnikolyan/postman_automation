@@ -1,0 +1,220 @@
+{
+  "info": {
+    "_postman_id": "309b1b78-6815-43f0-ba43-9d5e4304ba77",
+    "name": "Assignment4_Anahit",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "58684873",
+    "_collection_link": "https://go.postman.co/collection/58684873-309b1b78-6815-43f0-ba43-9d5e4304ba77?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const response = pm.response.json();\n\npm.collectionVariables.set(\"token\", response.token);"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "basic",
+          "basic": [
+            {
+              "key": "username",
+              "value": "admin_user",
+              "type": "string"
+            },
+            {
+              "key": "password",
+              "value": "{{admin_password}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "",
+          "options": {
+            "raw": {
+              "language": "text"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/login/api",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "login",
+            "api"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add new course -negative",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.test(\"Status code is 200\", function () {\n    pm.response.to.have.status(200);\n});\n\npm.test(\"Correct validation error is returned\", function () {\n    pm.expect(pm.response.text()).to.include(\"Course type should be 1 or 2\");\n});"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Course Anahit\",\n  \"body\": \"courseinfo\",\n  \"coursetype\": \"3\",\n  \"author\": \"Anahit\",\n  \"price\": 30000\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/add_course/api",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "add_course",
+            "api"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add new course - advanced",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "const response = pm.response.json();\n\npm.test(\"Course is added successfully\", function () {\n    pm.expect(pm.response.code).to.be.oneOf([200]);\n    pm.expect(response.id).to.exist\n});\n\npm.collectionVariables.set(\"courseId\", response.id);\n"
+            ]
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Course Anahit\",\n  \"body\": \"courseinfo\",\n  \"coursetype\": \"2\",\n  \"author\": \"Anahit\",\n  \"price\": 30000\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/add_course/api",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "add_course",
+            "api"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [],
+        "body": {
+          "mode": "formdata",
+          "formdata": []
+        },
+        "url": {
+          "raw": "{{base_url}}/courses/course/{{courseId}}",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "courses",
+            "course",
+            "{{courseId}}"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get advanced courses",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/courses/advanced/api",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "courses",
+            "advanced",
+            "api"
+          ]
+        }
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "https://qwallity-prod.onrender.com/"
+    },
+    {
+      "key": "courseId",
+      "value": ""
+    },
+    {
+      "key": "admin_password",
+      "value": "11111111"
+    },
+    {
+      "key": "token",
+      "value": ""
+    }
+  ]
+}

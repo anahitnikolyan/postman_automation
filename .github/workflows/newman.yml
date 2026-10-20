@@ -1,0 +1,39 @@
+
+name: Postman API Tests
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  newman-tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Install Newman and reporter
+        run: npm install -g newman newman-reporter-htmlextra
+
+      - name: Run Postman Collection
+        env:
+          ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }}
+        run: |
+          newman run Assignment4_Anahit.postman_collection.json \
+            --env-var "admin_password=$ADMIN_PASSWORD" \
+            -r cli,htmlextra \
+            --reporter-htmlextra-export newman-report.html
+
+      - name: Upload HTML Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: newman-html-report
+          path: newman-report.html
